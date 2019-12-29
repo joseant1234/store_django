@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_django # se renombra la funcion pues ya esta definido en la vista la funcion login
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.contrib.auth import logout as logout_django
 
 def index(request):
     return render(request, 'index.html', {
@@ -46,3 +47,9 @@ def login(request):
             messages.error(request, 'Usuario o contraseña no válidos')
 
     return render(request, 'users/login.html', {})
+
+def logout(request):
+    # el objeto request tiene la sesion
+    logout_django(request)
+    messages.success(request, 'La sesión de usuario fue cerrada')
+    return redirect('login')
