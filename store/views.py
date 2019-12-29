@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_django # se renombra la funcion pues ya esta definido en la vista la funcion login
 from django.shortcuts import redirect
+from django.contrib import messages
 
 def index(request):
     return render(request, 'index.html', {
@@ -38,7 +39,10 @@ def login(request):
         if user:
             # se va a generar sesion. Requiera la peticion y el usuario
             login_django(request, user)
+            messages.success(request, 'Bienvenido {}'.format(user.username))
             # recibe como argunmento el nombre de la ruta
             return redirect('index')
+        else:
+            messages.error(request, 'Usuario o contraseña no válidos')
 
     return render(request, 'users/login.html', {})
