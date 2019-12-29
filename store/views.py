@@ -5,6 +5,7 @@ from django.contrib.auth import login as login_django # se renombra la funcion p
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import logout as logout_django
+from .forms import RegisterForm
 
 def index(request):
     return render(request, 'index.html', {
@@ -53,3 +54,7 @@ def logout(request):
     logout_django(request)
     messages.success(request, 'La sesión de usuario fue cerrada')
     return redirect('login')
+
+def register(request):
+    form = RegisterForm()
+    return render(request, 'users/register.html', { 'form': form })
