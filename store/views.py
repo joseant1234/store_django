@@ -67,12 +67,14 @@ def register(request):
 
     if request.method == 'POST' and form.is_valid():
         # cleaned_data trae la informacion del formulario
-        username = form.cleaned_data.get('username')
-        email = form.cleaned_data.get('email')
-        password = form.cleaned_data.get('password')
+        # username = form.cleaned_data.get('username')
+        # email = form.cleaned_data.get('email')
+        # password = form.cleaned_data.get('password')
 
         # el metodo create_user se encarga de encriptar la constraseña
-        user = User.objects.create_user(username, email, password)
+        # user = User.objects.create_user(username, email, password)
+
+        user = form.save()
 
         if user:
             login_django(request, user)

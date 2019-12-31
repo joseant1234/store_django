@@ -56,3 +56,10 @@ class RegisterForm(forms.Form):
 
         if cleaned_data.get('password_confirmation') != cleaned_data.get('password'):
             self.add_error('password_confirmation', 'El password no coincide')
+
+    def save(self):
+        return User.objects.create_user(
+            self.cleaned_data.get('username'),
+            self.cleaned_data.get('email'),
+            self.cleaned_data.get('password')
+        )
