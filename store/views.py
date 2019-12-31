@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import logout as logout_django
 from .forms import RegisterForm
+from django.contrib.auth.models import User
 
 def index(request):
     return render(request, 'index.html', {
@@ -56,5 +57,26 @@ def logout(request):
     return redirect('login')
 
 def register(request):
-    form = RegisterForm()
+    # inicializa con valores
+    # form = RegisterForm({
+    #     'username': 'Usuario',
+    #     'email': 'usuario@email.com'
+    # })
+    # si la peticion es por el metodo POST utiliza los datos enviados en el formulario
+    form = RegisterForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        # cleaned_data trae la informacion del formulario
+        username = form.cleaned_data.get('username')
+        email = form.cleaned_data.get('email')
+        password = form.cleaned_data.get('password')
+
+        # el metodo create_user se encarga de encriptar la constraseña
+        user = User.objects.create_user(username, email, password)
+
+        if user:
+            login_django(request, user)
+            messages.success(request, 'Usuario fue creado')
+            return redirect('index')
+
     return render(request, 'users/register.html', { 'form': form })
