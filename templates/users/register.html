@@ -31,6 +31,9 @@
                   <div class="form-group">
                     {{ field.label_tag }}
                     {{ field }}
+                    {% if field.errors %}
+                      {{ field.errors }}
+                    {% endif %}
                   </div>
                 {% endfor %}
                 <button type="submit" class="btn btn-primary">Registrar</button>
