@@ -25,6 +25,12 @@ class RegisterForm(forms.Form):
             'placeholder': 'Password'
         })
     )
+    password_confirmation = forms.CharField(label="Confirmar password",
+        required=True,
+        widget=forms.PasswordInput(attrs= {
+            'class': 'form-control',
+        })
+    )
 
     # al ponerle un nombre con prefijo clean _ le indica a django q se va a implementar una validacion
     def clean_username(self):
@@ -40,3 +46,13 @@ class RegisterForm(forms.Form):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('El email se encuentra en uso')
         return email
+
+    # sobreescribe el metodo clean
+    # se usa cuando se requiere hacer validaciones en campos que esten referenciados
+    def clean(self):
+        # ejecuta el metodo clean q esta en la clase Form
+        # se obtiene la informacion del formulario
+        cleaned_data = super().clean()
+
+        if cleaned_data.get('password_confirmation') != cleaned_data.get('password'):
+            self.add_error('password_confirmation', 'El password no coincide')
