@@ -11,24 +11,28 @@
   <div id="navb" class="navbar-collapse collapse hide">
 
     <ul class="nav navbar-nav ml-auto">
-      <li class="navbar-item {% if request.path == login %}active{% endif %}">
-        <a href="{{ login }}" class="nav-link">
-          <span class="far fa-user"></span>
-          Login
-        </a>
-      </li>
-      <li class="navbar-item {% if request.path == register %}active{% endif %}">
-        <a href="{{ register }}" class="nav-link">
-          <span class="far fa-user"></span>
-          Registro
-        </a>
-      </li>
-      <li class="navbar-item">
-        <a href="{% url 'logout' %}" class="nav-link">
-          <span class="fas fa-sign-out-alt"></span>
-          Logout
-        </a>
-      </li>
+
+      {% if user.is_authenticated %}
+        <li class="navbar-item">
+          <a href="{% url 'logout' %}" class="nav-link">
+            <span class="fas fa-sign-out-alt"></span>
+            Logout
+          </a>
+        </li>
+      {% else %}
+        <li class="navbar-item {% if request.path == login %}active{% endif %}">
+          <a href="{{ login }}" class="nav-link">
+            <span class="far fa-user"></span>
+            Login
+          </a>
+        </li>
+        <li class="navbar-item {% if request.path == register %}active{% endif %}">
+          <a href="{{ register }}" class="nav-link">
+            <span class="fas fa-user-plus"></span>
+            Registro
+          </a>
+        </li>
+      {% endif %}
     </ul>
   </div>
 
