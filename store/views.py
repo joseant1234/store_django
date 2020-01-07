@@ -7,34 +7,20 @@ from django.contrib import messages
 from django.contrib.auth import logout as logout_django
 from .forms import RegisterForm
 from django.contrib.auth.models import User
+from products.models import Product
 
 def index(request):
+    products = Product.objects.all().order_by('-id')
     return render(request, 'index.html', {
         'message': 'Listado de productos',
         'title': 'Productos',
-        'products': [
-            {
-                'title': 'Playera',
-                'price': 5,
-                'stock': True
-            },
-            {
-                'title': 'Polo',
-                'price': 8,
-                'stock': True
-            },
-            {
-                'title': 'Raton',
-                'price': 25,
-                'stock': True
-            }
-        ]
+        'products': products,
     })
 
 def login(request):
     if request.user.is_authenticated:
         return redirect('index')
-        
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
