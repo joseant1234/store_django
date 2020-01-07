@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from .models import Product
 
-# por utilizar ListView es necesario definir el template_name y queryset
+# por utilizar ListView es necesario definir el template_name y queryset, pues sino utilizar por valores por defecto definidos
 # templateName es el nombre del template a utilizar
 # queryset es la consulta para obtener el listado de objetos
 class ProductListView(ListView):
