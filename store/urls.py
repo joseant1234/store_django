@@ -16,10 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from products.views import ProductListView
 
+# con el metodo as_view le indica a django q se va a utlizar la clase como una vista
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
+    path('', ProductListView.as_view(), name='index'),
     path('users/login', views.login, name='login'),
     path('users/logout', views.logout, name="logout"),
     path('users/register', views.register, name="register"),
