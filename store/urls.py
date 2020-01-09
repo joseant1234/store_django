@@ -18,6 +18,8 @@ from django.urls import path
 from . import views
 from products.views import ProductListView
 from django.urls import include
+from django.conf.urls.static import static
+from django.conf import settings
 
 # con el metodo as_view le indica a django q se va a utlizar la clase como una vista
 # el include permite incluir las rutas de la aplicacion products
@@ -29,3 +31,7 @@ urlpatterns = [
     path('users/register', views.register, name="register"),
     path('products/', include('products.urls'))
 ]
+
+# permite mostrar las imagenes en el template
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
