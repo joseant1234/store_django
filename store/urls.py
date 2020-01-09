@@ -17,12 +17,15 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 from products.views import ProductListView
+from django.urls import include
 
 # con el metodo as_view le indica a django q se va a utlizar la clase como una vista
+# el include permite incluir las rutas de la aplicacion products
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', ProductListView.as_view(), name='index'),
     path('users/login', views.login, name='login'),
     path('users/logout', views.logout, name="logout"),
     path('users/register', views.register, name="register"),
+    path('products/', include('products.urls'))
 ]
