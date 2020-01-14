@@ -3,5 +3,6 @@ from . import views
 
 # <PK> indica q el parametro es el # ID
 urlpatterns = [
-    path('<slug:slug>', views.ProductDetailView.as_view(), name='product')
+    path('search', views.ProductSearchListView.as_view(), name='search'),
+    path('<slug:slug>', views.ProductDetailView.as_view(), name='product'),    
 ]
