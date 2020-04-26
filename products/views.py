@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Q
 from django.views.generic.list import ListView
 from .models import Product
 from django.views.generic.detail import DetailView
@@ -33,7 +34,9 @@ class ProductSearchListView(ListView):
 
     # sobreescribir el metodo del queryset
     def get_queryset(self):
-        return Product.objects.filter(title__icontains=self.query())
+        # con la Clase Q permite realizar multiples filtros
+        filters = Q(title__icontains=self.query()) | Q(category__title__contains=self.query())
+        return Product.objects.filter(filters)
 
     def query(self):
         return self.request.GET.get('q')
