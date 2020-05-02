@@ -54,6 +54,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'store.urls'
 
+# se indica a django q se va dejar de utilizar el modelo User que viene por defecto por el nuevo modelo
+# aplicacion.modelo
+AUTH_USER_MODEL = 'users.User'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
