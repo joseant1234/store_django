@@ -29,7 +29,8 @@ urlpatterns = [
     path('users/login', views.login, name='login'),
     path('users/logout', views.logout, name="logout"),
     path('users/register', views.register, name="register"),
-    path('products/', include('products.urls'))
+    path('products/', include('products.urls')),
+    path('carts/', include('carts.urls')),
 ]
 
 # permite mostrar las imagenes en el template
