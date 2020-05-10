@@ -17,7 +17,10 @@
       <span class="text-danger">${{ product.price }}</span>
     </div>
     <p>{{ product.description}}</p>
-
+    <div class="">
+      <!-- no se usa with porque la variable product que usa el snippet esta definido en el template -->
+      {% include 'carts/snippets/add.html' %}
+    </div>
 
   </div>
 
