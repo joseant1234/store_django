@@ -5,9 +5,10 @@ from products.models import Product
 # Create your views here.
 def cart(request):
     cart = get_or_create_cart(request)
-
+    print(cart)
+    print(cart.products)
     return render(request, 'carts/cart.html', {
-
+      'cart': cart
     })
 
 def add(request):
