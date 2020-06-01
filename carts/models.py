@@ -30,6 +30,13 @@ class Cart(models.Model):
         self.total = self.subtotal + (self.subtotal * decimal.Decimal(Cart.FEE))
         self.save()
 
+    # Para N querys
+    def products_related(self):
+        # select_related('tabla a realizar el join')
+        # el metodo all no es necesario porque select_related se encarga de esa tarea
+        # con una sola consulta se obtiene los cart products y los products
+        return self.cartproducts_set.select_related('product')
+
 class CartProducts(models.Model):
     cart = models.ForeignKey(Cart, on_delete = models.CASCADE)
     product = models.ForeignKey(Product, on_delete = models.CASCADE)
