@@ -8,5 +8,6 @@ def order(request):
     order = get_or_create_order(cart, request)
 
     return render(request, 'orders/order.html', {
-
+        'cart': cart,
+        'order': order,
     })
