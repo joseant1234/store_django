@@ -23,10 +23,8 @@ class Cart(models.Model):
         self.update_subtotal()
         self.update_total()
 
-        # es para obtener la orden para el carrito de compras
-        order = self.order_set.first()
-        if order:
-            order.update_total()
+        if self.order:
+            self.order.update_total()
 
     def update_subtotal(self):
         # la suma del precio de todos los productos
@@ -46,6 +44,12 @@ class Cart(models.Model):
         # el metodo all no es necesario porque select_related se encarga de esa tarea
         # con una sola consulta se obtiene los cart products y los products
         return self.cartproducts_set.select_related('product')
+
+    # convertir el método a un property es con el decorator @property
+    @property
+    def order(self):
+        # es para obtener la orden para el carrito de compras
+        return self.order_set.first()
 
 class CartProductsManager(models.Manager):
     def create_or_update_quantity(self, cart, product, quantity = 1):
