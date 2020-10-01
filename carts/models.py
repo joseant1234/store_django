@@ -23,6 +23,11 @@ class Cart(models.Model):
         self.update_subtotal()
         self.update_total()
 
+        # es para obtener la orden para el carrito de compras
+        order = self.order_set.first()
+        if order:
+            order.update_total()
+
     def update_subtotal(self):
         # la suma del precio de todos los productos
         # self.subtotal = sum([ product.price for product in self.products.all() ])
