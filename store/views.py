@@ -9,6 +9,7 @@ from .forms import RegisterForm
 # from django.contrib.auth.models import User
 from products.models import Product
 from users.models import User
+from django.http import HttpResponseRedirect
 
 def index(request):
     products = Product.objects.all().order_by('-id')
@@ -33,6 +34,10 @@ def login(request):
             # se va a generar sesion. Requiera la peticion y el usuario
             login_django(request, user)
             messages.success(request, 'Bienvenido {}'.format(user.username))
+
+            if request.GET.get('next'):
+                return HttpResponseRedirect(request.GET['next'])
+
             # recibe como argunmento el nombre de la ruta
             return redirect('index')
         else:
