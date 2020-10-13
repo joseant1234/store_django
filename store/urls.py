@@ -32,7 +32,7 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('carts/', include('carts.urls')),
     path('order/', include('orders.urls')),
-    path('addresses', include('shipping_addresses.urls')),
+    path('addresses/', include('shipping_addresses.urls')),
 ]
 
 # permite mostrar las imagenes en el template
