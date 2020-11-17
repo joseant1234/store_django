@@ -28,6 +28,11 @@ class ShippingAddressUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateV
     def get_success_url(self):
         return reverse('shipping_addresses:shipping_addresses')
 
+    # metodo permite implementar validaciones sobre la petición
+    def dispath(self, request, *args, **kwargs):
+        if request.user.id != self.get_object().user_id:
+            return redirect('carts:cart')
+        return super(ShippingAddressUpdateView, self).dispatch(request, *args, **kwargs)
 
 # decorador login_required permite acceder a la vista si está autenticado,
 # login url es para redirect en caso el usuario cuando no puede entrar
