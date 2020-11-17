@@ -2,9 +2,12 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from .models import ShippingAddress
 from .forms import ShippingAddressForm
+from django.shortcuts import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
 
 # para proteger el acceso con el login se hereda al comienzo de la clase LoginRequiredMixin
 class ShippingAddressListView(LoginRequiredMixin, ListView):
@@ -14,6 +17,17 @@ class ShippingAddressListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return ShippingAddress.objects.filter(user=self.request.user).order_by('-default')
+
+class ShippingAddressUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    login_url = 'login'
+    model = ShippingAddress
+    form_class = ShippingAddressForm
+    template_name = 'shipping_addresses/update.html'
+    success_message = 'Dirección actualizada'
+
+    def get_success_url(self):
+        return reverse('shipping_addresses:shipping_addresses')
+
 
 # decorador login_required permite acceder a la vista si está autenticado,
 # login url es para redirect en caso el usuario cuando no puede entrar
