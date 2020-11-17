@@ -3,15 +3,21 @@ from django.views.generic import ListView
 from .models import ShippingAddress
 from .forms import ShippingAddressForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Create your views here.
-class ShippingAddressListView(ListView):
+# para proteger el acceso con el login se hereda al comienzo de la clase LoginRequiredMixin
+class ShippingAddressListView(LoginRequiredMixin, ListView):
+    login_url = 'login'
     model = ShippingAddress
     template_name = 'shipping_addresses/shipping_addresses.html'
 
     def get_queryset(self):
         return ShippingAddress.objects.filter(user=self.request.user).order_by('-default')
 
+# decorador login_required permite acceder a la vista si está autenticado,
+# login url es para redirect en caso el usuario cuando no puede entrar
+@login_required(login_url='login')
 def create(request):
     # inicializar el formulario con los valores del request con el metodo post
     form = ShippingAddressForm(request.POST or None)

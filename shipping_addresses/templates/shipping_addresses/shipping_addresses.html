@@ -6,7 +6,7 @@
             Mis direcciones
         </div>
         <a href="{% url 'shipping_addresses:create' %}">Agregar nueva dirección</a>
-        <div class="mt-2">
+        <div class="mt-2 mb-5">
             <!-- el template se usa por la clase listview -->
             {% for shipping_address in object_list %}
                 <div class="mt-2">
