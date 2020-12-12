@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import reverse, render, redirect, get_object_or_404
 from django.views.generic import ListView
 from .models import ShippingAddress
 from .forms import ShippingAddressForm
-from django.shortcuts import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -53,8 +52,6 @@ class ShippingAddressDeleteView(LoginRequiredMixin, DeleteView):
 
         return super(ShippingAddressDeleteView, self).dispatch(request, *args, **kwargs)
 
-
-
 # decorador login_required permite acceder a la vista si está autenticado,
 # login url es para redirect en caso el usuario cuando no puede entrar
 @login_required(login_url='login')
@@ -67,7 +64,9 @@ def create(request):
         shipping_address = form.save(commit=False)
         shipping_address.user = request.user
         # se asigna default si es q no hay direcciones para el usuario
-        shipping_address.default = not ShippingAddress.objects.filter(user=request.user).exists()
+        # shipping_address.default = not ShippingAddress.objects.filter(user=request.user).exists()
+
+        shipping_address.default = not request.user.has_shipping_address()
         # con el usuario asignado se persiste el shipping address
         shipping_address.save()
 
@@ -77,3 +76,17 @@ def create(request):
     return render(request, 'shipping_addresses/create.html', {
         'form': form
     })
+
+@login_required(login_url='login')
+def default(request, pk):
+    shipping_address = get_object_or_404(ShippingAddress, pk=pk)
+
+    if request.user.id != shipping_address.user_id:
+        return redirect('carts:cart')
+
+    if request.user.has_shipping_address():
+        request.user.shipping_address.update_default()
+
+    shipping_address.update_default(True)
+
+    return redirect('shipping_addresses:shipping_addresses')

@@ -16,7 +16,7 @@
                     Dirección principal
                 </div>
             {% else %}
-                <a href="#" class="btn btn-warning">Default</a>
+                <a href="{% url 'shipping_addresses:default' shipping_address.pk %}" class="btn btn-warning">Default</a>
                 <a href="{% url 'shipping_addresses:delete' shipping_address.pk %}" class="btn btn-danger">Eliminar</a>
             {% endif %}
         </div>
