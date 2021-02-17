@@ -1,9 +1,13 @@
-from django.db import models
-from users.models import User
-from carts.models import Cart
-from enum import Enum
-from django.db.models.signals import pre_save
 import uuid
+from enum import Enum
+
+from django.db import models
+from django.db.models.signals import pre_save
+
+from carts.models import Cart
+from shipping_addresses.models import ShippingAddress
+from users.models import User
+
 
 class OrderStatus(Enum):
     CREATED = 'CREATED'
@@ -21,9 +25,20 @@ class Order(models.Model):
     total = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     order_id = models.CharField(max_length=100, null=False, blank=False, unique=True)
+    shipping_address = models.ForeignKey(ShippingAddress, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.order_id
+
+    def get_or_set_shipping_address(self):
+        if self.shipping_address:
+            return self.shipping_address
+        shipping_address = self.user.shipping_address
+        if shipping_address:
+            self.shipping_address = shipping_address
+            self.save()
+
+        return shipping_address
 
     def get_total(self):
         return self.cart.total + self.shipping_total
