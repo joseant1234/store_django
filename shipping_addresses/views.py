@@ -53,6 +53,10 @@ class ShippingAddressDeleteView(LoginRequiredMixin, DeleteView):
         if request.user.id != self.get_object().user_id:
             return redirect('carts:cart')
 
+        # si tiene al menos una orden no puede ser eliminado y se hace redirect a la vista de direcciones
+        if self.get_object().has_orders():
+            return redirect('shipping_addresses:shipping_addresses')
+
         return super(ShippingAddressDeleteView, self).dispatch(request, *args, **kwargs)
 
 # decorador login_required permite acceder a la vista si está autenticado,

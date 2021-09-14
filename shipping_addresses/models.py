@@ -18,8 +18,11 @@ class ShippingAddress(models.Model):
         return self.postal_code
 
     def update_default(self, default=False):
-        self.defaut = default
+        self.default = default
         self.save()
+
+    def has_orders(self):
+        return self.order_set.count() >= 1
 
     # decorador property convierte método en una propiedad
     @property
