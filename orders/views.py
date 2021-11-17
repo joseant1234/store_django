@@ -55,3 +55,20 @@ def set_address(request, pk):
     order.update_shipping_address(shipping_address)
 
     return redirect('orders:address')
+
+@login_required(login_url='login')
+def confirm(request):
+    cart = get_or_create_cart(request)
+    order = get_or_create_order(cart, request)
+
+    shipping_address =  order.shipping_address
+
+    if shipping_address is None:
+        return redirect('orders:address')
+
+    return render(request, 'orders/confirm.html', {
+        'cart': cart,
+        'order': order,
+        'shipping_address': shipping_address,
+        'breadcrumb': breadcrumb(address=True, confirmation=True)
+    })

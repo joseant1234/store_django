@@ -8,5 +8,6 @@ urlpatterns = [
     path('', views.order, name='order'),
     path('address', views.address, name='address'),
     path('select/address', views.select_address, name='select_address'),
-    path('set/address/<int:pk>', views.set_address, name='set_address')
+    path('set/address/<int:pk>', views.set_address, name='set_address'),
+    path('confirmation', views.confirm, name='confirm')
 ]
