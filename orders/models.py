@@ -54,6 +54,10 @@ class Order(models.Model):
         self.status = OrderStatus.CANCELED
         self.save()
 
+    def complete(self):
+        self.status = OrderStatus.COMPLETED
+        self.save()
+
 def set_order_id(sender, instance, *args, **kwargs):
     if not instance.order_id:
         # str lo convierte a una cadena
