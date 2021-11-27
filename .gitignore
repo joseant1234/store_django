@@ -145,3 +145,4 @@ venv/
 **/static/webs/assets/
 
 .vscode/
+.env

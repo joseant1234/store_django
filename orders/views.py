@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from carts.utils import get_or_create_cart, destroy_cart
+from orders.mails import Mail
 from .models import Order
 from .utils import get_or_create_order, breadcrumb, destroy_order
 from django.contrib.auth.decorators import login_required
@@ -98,6 +99,7 @@ def complete(request):
         return redirect('carts:cart')
 
     order.complete()
+    Mail.send_complete_order(order, request.user)
     destroy_cart(request)
     destroy_order(request)
 
