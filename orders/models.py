@@ -1,21 +1,13 @@
 import uuid
-from enum import Enum
 
 from django.db import models
 from django.db.models.signals import pre_save
 
 from carts.models import Cart
+from orders.common import OrderStatus, choices
 from shipping_addresses.models import ShippingAddress
 from users.models import User
 
-
-class OrderStatus(Enum):
-    CREATED = 'CREATED'
-    PAYED = 'PAYED'
-    COMPLETED = 'COMPLETED'
-    CANCELED = 'CANCELED'
-
-choices = [(tag, tag.value) for tag in OrderStatus]
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
