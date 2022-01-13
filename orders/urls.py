@@ -11,5 +11,6 @@ urlpatterns = [
     path('set/address/<int:pk>', views.set_address, name='set_address'),
     path('confirmation', views.confirm, name='confirm'),
     path('cancel', views.cancel, name='cancel'),
-    path('complete', views.complete, name='complete')
+    path('complete', views.complete, name='complete'),
+    path('completed', views.OrderListView.as_view(), name='completed')
 ]

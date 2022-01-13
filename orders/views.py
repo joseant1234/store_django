@@ -1,11 +1,27 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from carts.utils import get_or_create_cart, destroy_cart
-from orders.mails import Mail
-from .models import Order
-from .utils import get_or_create_order, breadcrumb, destroy_order
-from django.contrib.auth.decorators import login_required
-from shipping_addresses.models import ShippingAddress
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.query import EmptyQuerySet
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import ListView
+
+from carts.utils import destroy_cart, get_or_create_cart
+from orders.mails import Mail
+from shipping_addresses.models import ShippingAddress
+
+from .models import Order
+from .utils import breadcrumb, destroy_order, get_or_create_order
+
+
+class OrderListView(LoginRequiredMixin, ListView):
+    login_url = 'login'
+    template_name = 'orders/orders.html'
+
+    def get_queryset(self):
+        # EmptyQuerySet devuelve una lista vacía
+        # return EmptyQuerySet
+        return self.request.user.orders_completed()
+
 
 # decorador que redirige si el usuario no está autenticado
 @login_required(login_url='login')
