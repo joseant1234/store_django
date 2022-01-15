@@ -11,7 +11,7 @@ from shipping_addresses.models import ShippingAddress
 
 from .models import Order
 from .utils import breadcrumb, destroy_order, get_or_create_order
-
+from .decorators import validate_cart_and_order
 
 class OrderListView(LoginRequiredMixin, ListView):
     login_url = 'login'
@@ -25,9 +25,10 @@ class OrderListView(LoginRequiredMixin, ListView):
 
 # decorador que redirige si el usuario no está autenticado
 @login_required(login_url='login')
-def order(request):
-    cart = get_or_create_cart(request)
-    order = get_or_create_order(cart, request)
+@validate_cart_and_order
+def order(request, cart, order):
+    # cart = get_or_create_cart(request)
+    # order = get_or_create_order(cart, request)
 
     return render(request, 'orders/order.html', {
         'cart': cart,
@@ -36,9 +37,10 @@ def order(request):
     })
 
 @login_required(login_url='login')
-def address(request):
-    cart = get_or_create_cart(request)
-    order = get_or_create_order(cart, request)
+@validate_cart_and_order
+def address(request, cart, order):
+    # cart = get_or_create_cart(request)
+    # order = get_or_create_order(cart, request)
 
     shipping_address = order.get_or_set_shipping_address()
     can_choose_address = request.user.shippingaddress_set.count() > 1
@@ -61,9 +63,11 @@ def select_address(request):
     })
 
 @login_required(login_url='login')
-def set_address(request, pk):
-    cart = get_or_create_cart(request)
-    order = get_or_create_order(cart, request)
+@validate_cart_and_order
+def set_address(request, cart, order, pk):
+    # el parametro pk seria *args, **kwargs del decorator
+    # cart = get_or_create_cart(request)
+    # order = get_or_create_order(cart, request)
 
     shipping_address = get_object_or_404(ShippingAddress, pk=pk)
 
@@ -75,9 +79,10 @@ def set_address(request, pk):
     return redirect('orders:address')
 
 @login_required(login_url='login')
-def confirm(request):
-    cart = get_or_create_cart(request)
-    order = get_or_create_order(cart, request)
+@validate_cart_and_order
+def confirm(request, cart, order):
+    # cart = get_or_create_cart(request)
+    # order = get_or_create_order(cart, request)
 
     shipping_address =  order.shipping_address
 
@@ -92,9 +97,10 @@ def confirm(request):
     })
 
 @login_required(login_url='login')
-def cancel(request):
-    cart = get_or_create_cart(request)
-    order = get_or_create_order(cart, request)
+@validate_cart_and_order
+def cancel(request, cart, order):
+    # cart = get_or_create_cart(request)
+    # order = get_or_create_order(cart, request)
 
     if request.user.id != order.user_id:
         return redirect('carts:cart')
@@ -107,9 +113,10 @@ def cancel(request):
     return redirect('index')
 
 @login_required(login_url='login')
-def complete(request):
-    cart = get_or_create_cart(request)
-    order = get_or_create_order(cart, request)
+@validate_cart_and_order
+def complete(request, cart, order):
+    # cart = get_or_create_cart(request)
+    # order = get_or_create_order(cart, request)
 
     if request.user.id != order.user_id:
         return redirect('carts:cart')
