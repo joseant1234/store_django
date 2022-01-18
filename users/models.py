@@ -15,11 +15,21 @@ class User(AbstractUser):
     def shipping_address(self):
         return self.shippingaddress_set.filter(default=True).first()
 
+    @property
+    def addresses(self):
+        return self.shipping_address_set.all()
+
+    # metodo para saber si el usuario posee una direccion principal
     def has_shipping_address(self):
         return self.shipping_address is not None
 
     def orders_completed(self):
         return self.order_set.filter(status=OrderStatus.COMPLETED).order_by('-id')
+
+    # metodo para conocer si el usuarios posee direcciones
+    def has_shipping_addresses(self):
+        return self.shippingaddress_set.exists()
+
 
 # para agregar metodos a un model existente se usa proxy model. El proxy model no genera una tabla en la base de datos
 class Customer(User):
