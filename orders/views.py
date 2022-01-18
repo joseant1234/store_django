@@ -12,6 +12,7 @@ from shipping_addresses.models import ShippingAddress
 from .models import Order
 from .utils import breadcrumb, destroy_order, get_or_create_order
 from .decorators import validate_cart_and_order
+import threading
 
 class OrderListView(LoginRequiredMixin, ListView):
     login_url = 'login'
@@ -122,7 +123,13 @@ def complete(request, cart, order):
         return redirect('carts:cart')
 
     order.complete()
-    Mail.send_complete_order(order, request.user)
+    # en target se pone la tarea q se quiere ejecutar en segundo plano
+    # en una tupla se indica los argumentos
+    thread = threading.Thread(target=Mail.send_complete_order, args=(
+        order, request.user
+    ))
+    thread.start()
+
     destroy_cart(request)
     destroy_order(request)
 
