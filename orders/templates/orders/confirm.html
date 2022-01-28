@@ -75,7 +75,8 @@
             // input cuyo name es code
             const input = this.code
             const code = input.value
-            const url = this.action
+            const url = this.action + "?code=" + code
+
 
             fetch(url)
             .then(response => response.json())
