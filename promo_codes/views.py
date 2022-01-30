@@ -1,9 +1,15 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+
+from carts.utils import get_or_create_cart
+from orders.utils import get_or_create_order
 from promo_codes.models import PromoCode
 
 
 def validate(request):
+    cart = get_or_create_cart(request)
+    order = get_or_create_order(cart, request)
+
     code = request.GET.get('code')
     promo_code = PromoCode.objects.filter(code=code).first()
 
@@ -12,8 +18,11 @@ def validate(request):
             'status': False
         }, status=404)
 
+    order.apply_promo_code(promo_code)
+
     return JsonResponse({
         'status': True,
         'code': promo_code.code,
         'discount': promo_code.discount,
+        'total': order.total
     })
