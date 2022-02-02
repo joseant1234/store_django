@@ -34,6 +34,7 @@ urlpatterns = [
     path('order/', include('orders.urls')),
     path('addresses/', include('shipping_addresses.urls')),
     path('codes/', include('promo_codes.urls')),
+    path('payments/', include('billing_profiles.urls')),
 ]
 
 # permite mostrar las imagenes en el template
